@@ -15,7 +15,7 @@
   + Quantities
   + Current prices and totals
   + Security names
-  + 15/30/50/100-day Simple Moving Averages (MA)
+  + 5/15/30/50/100-day Simple Moving Averages (MA)
   + Flags for current price being above/below those MA's
   + Portfolio weights ($/%)
   + Unrealized Profits/Losses ($/%)

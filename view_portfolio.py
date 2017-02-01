@@ -34,6 +34,7 @@ def make_main_table():
     quantities = []
     cur_prices = []
     names = []
+    ma_5 = [] # Moving average 5-day    
     ma_15 = [] # Moving average 15-day
     ma_30 = [] # Moving average 30-day
     ma_50 = [] # Moving average 50-day
@@ -61,6 +62,7 @@ def make_main_table():
 
         # Fetch price data for each position
         fetch_price_data(data['symbol'])
+        ma_5.append(fetch_moving_average(data['symbol'], 5))                
         ma_15.append(fetch_moving_average(data['symbol'], 15))
         ma_30.append(fetch_moving_average(data['symbol'], 30))
         ma_50.append(fetch_moving_average(data['symbol'], 50))
@@ -79,8 +81,9 @@ def make_main_table():
     df['CurTotal'] = df['CurPrice'] * df['Quantity']
     df['P/L ($)'] = df['CurTotal'] - df['BuyTotal']
     df['P/L (%)'] = (df['P/L ($)'] / df['BuyTotal']) * 100
-    total_equity = my_trader.equity()
+    total_equity = my_trader.market_value()
     df['Weight (%)'] = df['CurTotal'] / total_equity * 100
+    df['MA (5)'] = ma_5
     df['MA (15)'] = ma_15
     df['MA (30)'] = ma_30
     df['MA (50)'] = ma_50
@@ -154,7 +157,7 @@ def check_conditions(df):
     flags = []
     for index, row in df.iterrows():
         flag = ''
-        ma_to_test = ['MA (15)', 'MA (30)', 'MA (50)', 'MA (100)']
+        ma_to_test = ['MA (5)', 'MA (15)', 'MA (30)', 'MA (50)', 'MA (100)']
         for ma in ma_to_test:
             if row['CurPrice'] < row[ma]:
                 flag += '↓'
